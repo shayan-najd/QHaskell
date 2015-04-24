@@ -1,32 +1,21 @@
 module Test where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
 import qualified Tests.ADTUntypedNamed     as FAUN
 import qualified Tests.ADTUntypedDebruijn  as FAUD
 import qualified Tests.GADTTyped           as FGTD
 import qualified Tests.GADTFirstOrder      as FGFO
 import qualified Tests.GADTHigherOrder     as FGHO
-import qualified Tests.MiniFeldspar        as FMWS
 import qualified Tests.Conversion          as FCNV
 
-import qualified Tests.CompareExamples     as TC
-
-import qualified Examples.CRC.CDSL ()
-import qualified Examples.CRC.QDSL ()
-import qualified Examples.FFT.CDSL ()
-import qualified Examples.FFT.QDSL ()
-import qualified Examples.IPBW.CDSL ()
-import qualified Examples.IPBW.QDSL ()
-import qualified Examples.IPGray.CDSL ()
-import qualified Examples.IPGray.QDSL ()
-import qualified Examples.Windowing.CDSL ()
-import qualified Examples.Windowing.QDSL ()
+import QHaskell.Normalisation ()
+import QHaskell.Simplification ()
+import QHaskell.CSE ()
 
 main :: IO ()
 main = print (if FAUN.test  && FAUD.test && FGTD.test  &&
-                 FGFO.test  && FGHO.test && FMWS.test  &&
-                 FCNV.test  && TC.result
+                 FGFO.test  && FGHO.test && FCNV.test
               then "Pass!"
               else "Fail!")
 

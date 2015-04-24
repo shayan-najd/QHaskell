@@ -1,16 +1,16 @@
 module Tests.GADTTyped where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
-import QFeldspar.Expression.GADTTyped
-import QFeldspar.Variable.Scoped
-import qualified QFeldspar.Type.ADT as TFA
-import qualified QFeldspar.Expression.ADTValue as V
-import qualified QFeldspar.Nat.ADT as NA
-import QFeldspar.Environment.Scoped
-import QFeldspar.Conversion
-import QFeldspar.Expression.Conversions.Evaluation.GADTTyped ()
-import QFeldspar.Inference
+import QHaskell.Expression.GADTTyped
+import QHaskell.Variable.Scoped
+import qualified QHaskell.Type.ADT as TFA
+import qualified QHaskell.Expression.ADTValue as V
+import qualified QHaskell.Nat.ADT as NA
+import QHaskell.Environment.Scoped
+import QHaskell.Conversion
+import QHaskell.Expression.Conversions.Evaluation.GADTTyped ()
+import QHaskell.Inference
 
 dbl :: Exp (NA.Suc NA.Zro) TFA.Typ
 dbl = Abs (App TFA.Int (App TFA.Int (Var (Suc Zro)) (Var Zro)) (Var Zro))

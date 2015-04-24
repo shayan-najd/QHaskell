@@ -1,12 +1,12 @@
 module Tests.ADTUntypedDebruijn where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
-import QFeldspar.Expression.ADTUntypedDebruijn
-import QFeldspar.Variable.Plain
-import qualified QFeldspar.Expression.ADTValue as V
-import QFeldspar.Conversion
-import QFeldspar.Expression.Conversions.Evaluation.ADTUntypedDebruijn ()
+import QHaskell.Expression.ADTUntypedDebruijn
+import QHaskell.Variable.Plain
+import qualified QHaskell.Expression.ADTValue as V
+import QHaskell.Conversion
+import QHaskell.Expression.Conversions.Evaluation.ADTUntypedDebruijn ()
 
 dbl :: Exp
 dbl = Abs (Fun (App (App (Var (Suc Zro)) (Var Zro)) (Var Zro)))

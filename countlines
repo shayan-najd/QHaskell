@@ -1,9 +1,0 @@
-#!/bin/bash
-for a in IPBW IPGray CRC FFT Windowing
-do
-    for n in QDSL CDSL
-    do
-        echo ${a}-${n}
-	cat Examples/${a}/${n}.hs | wc -l
-    done
-done

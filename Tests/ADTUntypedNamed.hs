@@ -1,12 +1,12 @@
 module Tests.ADTUntypedNamed where
 
-import QFeldspar.MyPrelude
-import QFeldspar.Expression.ADTUntypedNamed
-import qualified QFeldspar.Expression.ADTValue as V
-import QFeldspar.Conversion
-import QFeldspar.Expression.Conversions.Evaluation.ADTUntypedNamed ()
+import QHaskell.MyPrelude
+import QHaskell.Expression.ADTUntypedNamed
+import qualified QHaskell.Expression.ADTValue as V
+import QHaskell.Conversion
+import QHaskell.Expression.Conversions.Evaluation.ADTUntypedNamed ()
 import qualified Language.Haskell.TH.Syntax as TH
-import QFeldspar.Expression.Utils.TemplateHaskell
+import QHaskell.Expression.Utils.TemplateHaskell
 import Tests.TemplateHaskell(add)
 type Var = TH.Name
 

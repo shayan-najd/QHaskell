@@ -1,37 +1,34 @@
 module Tests.Conversion where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
 import qualified Language.Haskell.TH.Syntax              as TH
-import qualified QFeldspar.Expression.ADTUntypedNamed     as FAUN
-import qualified QFeldspar.Expression.ADTUntypedDebruijn  as FAUD
-import qualified QFeldspar.Expression.GADTTyped           as FGTD
-import qualified QFeldspar.Expression.GADTFirstOrder      as FGFO
-import qualified QFeldspar.Expression.GADTHigherOrder     as FGHO
-import qualified QFeldspar.Expression.MiniFeldspar      as FMWS
-import qualified QFeldspar.Expression.ADTValue            as FAV
-import qualified QFeldspar.Expression.GADTValue           as FGV
+import qualified QHaskell.Expression.ADTUntypedNamed     as FAUN
+import qualified QHaskell.Expression.ADTUntypedDebruijn  as FAUD
+import qualified QHaskell.Expression.GADTTyped           as FGTD
+import qualified QHaskell.Expression.GADTFirstOrder      as FGFO
+import qualified QHaskell.Expression.GADTHigherOrder     as FGHO
+import qualified QHaskell.Expression.ADTValue            as FAV
+import qualified QHaskell.Expression.GADTValue           as FGV
 import qualified Tests.TemplateHaskell     as TH
 import qualified Tests.ADTUntypedNamed     as FAUN
 import qualified Tests.ADTUntypedDebruijn  as FAUD
 import qualified Tests.GADTTyped           as FGTD
 import qualified Tests.GADTFirstOrder      as FGFO
 import qualified Tests.GADTHigherOrder     as FGHO
-import qualified Tests.MiniFeldspar      as FMWS ()
-import qualified QFeldspar.Type.ADT                       as TFA
-import qualified QFeldspar.Type.GADT                      as TFG
-import qualified QFeldspar.Environment.Map                         as EM
-import qualified QFeldspar.Environment.Plain                       as EP
-import qualified QFeldspar.Environment.Scoped                      as ES
-import qualified QFeldspar.Environment.Typed                       as ET
-import qualified QFeldspar.Normalisation  as NGFO
-import QFeldspar.Conversion
-import QFeldspar.Variable.Conversion                     ()
-import QFeldspar.Environment.Conversion                  ()
-import QFeldspar.Type.Conversion                ()
-import QFeldspar.Expression.Conversion          ()
-import qualified QFeldspar.Nat.ADT as NA
-import QFeldspar.Expression.Utils.TemplateHaskell
+import qualified QHaskell.Type.ADT                       as TFA
+import qualified QHaskell.Type.GADT                      as TFG
+import qualified QHaskell.Environment.Map                         as EM
+import qualified QHaskell.Environment.Plain                       as EP
+import qualified QHaskell.Environment.Scoped                      as ES
+import qualified QHaskell.Environment.Typed                       as ET
+import QHaskell.Conversion
+import QHaskell.Variable.Conversion                     ()
+import QHaskell.Environment.Conversion                  ()
+import QHaskell.Type.Conversion                ()
+import QHaskell.Expression.Conversion          ()
+import qualified QHaskell.Nat.ADT as NA
+import QHaskell.Expression.Utils.TemplateHaskell
 
 type One    = NA.Suc NA.Zro
 type Add    = Arr Int (Arr Int Int)
@@ -59,18 +56,6 @@ envAddValA = (FAV.lft ((+) :: Int -> Int -> Int)) : []
 
 envAddValM :: EM.Env TH.Name FAV.Exp
 envAddValM = (stripNameSpace 'TH.add , FAV.lft ((+) :: Int -> Int -> Int)) : []
-
-cnvFMWS :: Cnv (e , ET.Env TFG.Typ EnvAdd , ES.Env (NA.Suc NA.Zro) TH.Name)
-               (FGFO.Exp EnvAdd Int) => e -> Int -> Bool
-cnvFMWS e j = case runNamM
-              (do e'   :: FGFO.Exp EnvAdd Int <- cnv (e , envAddTypG
-                                                     , vec)
-                  let e'' = NGFO.nrm e'
-                  e''' :: FMWS.Exp EnvAdd Int <- cnv (e'' , envAddTypG
-                                                     ,vec)
-                  curry cnv e''' envAddValG) of
-           Rgt (FGV.Exp i) -> i == j
-           _     -> False
 
 cnvFGHO :: Cnv (e , ET.Env TFG.Typ EnvAdd , ES.Env (NA.Suc NA.Zro) TH.Name)
            (FGHO.Exp EnvAdd Int) => e -> Int -> Bool
@@ -125,8 +110,4 @@ test = cnvFAUN TH.four   4 && cnvFAUN FAUN.four 4 &&
 
        cnvFGHO TH.four   4 && cnvFGHO FAUN.four 4 && cnvFGHO FAUD.four 4 &&
        cnvFGHO FGTD.four 4 && cnvFGHO FGFO.four 4 &&
-       cnvFGHO FGHO.four 4 &&
-
-       cnvFMWS TH.four   4 && cnvFMWS FAUN.four 4 && cnvFMWS FAUD.four 4 &&
-       cnvFMWS FGTD.four 4 && cnvFMWS FGFO.four 4 &&
-       cnvFMWS FGHO.four 4 -- && cnvFMWS FWMS.four 4
+       cnvFGHO FGHO.four 4

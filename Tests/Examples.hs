@@ -1,10 +1,10 @@
 module Tests.Examples where
 {-
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 import System.IO.Unsafe
 
-import qualified QFeldspar.QDSL as Q
-import qualified QFeldspar.CDSL as C
+import qualified QHaskell.QDSL as Q
+import qualified QHaskell.CDSL as C
 
 import qualified Examples.IPGray.QDSL as IPGrayQ
 import qualified Examples.IPGray.CDSL as IPGrayC

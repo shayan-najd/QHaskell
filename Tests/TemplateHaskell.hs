@@ -1,6 +1,6 @@
 module Tests.TemplateHaskell where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
 import Language.Haskell.TH.Syntax
 

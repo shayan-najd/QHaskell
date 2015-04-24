@@ -1,16 +1,16 @@
 module Tests.GADTFirstOrder where
 
-import QFeldspar.MyPrelude
+import QHaskell.MyPrelude
 
-import QFeldspar.Expression.GADTFirstOrder
-import QFeldspar.Variable.Typed
-import QFeldspar.Conversion
-import QFeldspar.Expression.Conversions.Evaluation.GADTFirstOrder ()
-import qualified QFeldspar.Expression.GADTValue as FGV
-import QFeldspar.Singleton
-import QFeldspar.Environment.Typed
+import QHaskell.Expression.GADTFirstOrder
+import QHaskell.Variable.Typed
+import QHaskell.Conversion
+import QHaskell.Expression.Conversions.Evaluation.GADTFirstOrder ()
+import qualified QHaskell.Expression.GADTValue as FGV
+import QHaskell.Singleton
+import QHaskell.Environment.Typed
 
-import qualified QFeldspar.Type.GADT as TFG
+import qualified QHaskell.Type.GADT as TFG
 
 dbl :: Exp (Arr Int (Arr Int Int) ': '[])
        (Arr Int Int)
