@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -fno-warn-unused-binds -fno-warn-name-shadowing #-}
 module QHaskell
        (module Prelude,
-        norm,tran,eval,Qt,Dp,Type,EvalEnv,TypeEnv,(<:>),(<+>),nil,NameType(..),
-        ErrM(..))
+        norm,tran,tranQ,eval,Qt,Dp,Type,EvalEnv,TypeEnv,(<:>),(<+>),nil,NameType(..),
+        ErrM(..),frmRgt)
 where
 
 import Prelude
 -- import Prelude(Float,Bool(..),Maybe,String,(.))
-import QHaskell.MyPrelude (ErrM(..),runNamM,frmRgtZro)
+import QHaskell.MyPrelude (ErrM(..),runNamM,frmRgtZro,frmRgt)
 
 import QHaskell.Singleton
 import QHaskell.Conversion
@@ -19,6 +19,7 @@ import qualified QHaskell.Expression.GADTFirstOrder  as GFO
 import qualified QHaskell.Expression.GADTValue       as GV
 import qualified QHaskell.Type.GADT                  as TG
 import QHaskell.Expression.Utils.TemplateHaskell
+import QHaskell.Expression.Conversions.Reification
 import QHaskell.Expression.Conversions.Evaluation.GADTFirstOrder ()
 import QHaskell.Expression.Conversion ()
 import QHaskell.Type.Conversion ()
@@ -49,6 +50,12 @@ norm = nrm
 tran :: Type a => TypeEnv g -> Qt a -> ErrM (Dp g a)
 tran g q = let (ets ,ess) = decompose g
            in runNamM (cnv (q , ets , ess))
+
+tranQ :: Type a => TypeEnv g -> Qt a -> Qt (Dp g a)
+tranQ g q = do let (ets ,ess) = decompose g
+               case runNamM (cnv (q , ets , ess)) of
+                 Rgt d -> rei d
+                 Lft s -> fail s
 
 eval :: Type a => EvalEnv g -> Dp g a -> a
 eval g d = let GV.Exp v = frmRgtZro (cnv (d , g))
