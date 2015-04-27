@@ -61,7 +61,6 @@ library
      QHaskell.Expression.GADTHigherOrder,
      QHaskell.Expression.GADTValue,
      QHaskell.Expression.ADTValue,
-     QHaskell.Expression.C,
      QHaskell.Expression.GADTFirstOrder,
      QHaskell.Expression.ADTUntypedNamed,
      QHaskell.Expression.ADTUntypedDebruijn,
