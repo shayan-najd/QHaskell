@@ -1,4 +1,4 @@
-QFeldspar, an experimental QDSL front-end for Feldspar
+QHaskell: a tool for developing QDSLs in Haskell
 ------------------------------------------------------
 
 To be able to load project files in GHCi:
@@ -10,10 +10,6 @@ To be able to load project files in GHCi:
 To get started with some examples:
 
 * refer to the folder "Examples"
-
-To redo the experiment:
-
-*  execute "runexperiment"
 
 To compile the project:
 
