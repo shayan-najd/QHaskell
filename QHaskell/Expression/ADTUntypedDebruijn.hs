@@ -26,6 +26,7 @@ data Exp = ConI Int
          | Typ  TFA.Typ Exp
          | Int  Int
          | Mem  Exp
+         | Fix  Exp
 
 deriving instance Eq   Exp
 deriving instance Show Exp

@@ -1,10 +1,10 @@
 module QHaskell.Expression.GADTValue
     (Exp(..)
     ,conI,conB,conF,var,abs,app,tpl,fst,snd,leT
-    ,tag,int,mem
+    ,tag,int,mem,fix
     ,getTrm) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,may,som,non,tpl,cnd)
+import QHaskell.MyPrelude hiding (abs,fst,snd,may,som,non,tpl,cnd,fix)
 import qualified QHaskell.MyPrelude as MP
 import QHaskell.Type.GADT ()
 
@@ -73,3 +73,6 @@ int = Exp . fromIntegral
 
 mem :: Exp a -> Exp a
 mem = id
+
+fix :: Exp (a -> a) -> Exp a
+fix = prm1 MP.fix

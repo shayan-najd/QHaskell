@@ -37,7 +37,7 @@ module QHaskell.MyPrelude
         module Control.Monad,
         module Data.Array,
         Bol,Ary,May,Cmx,Flt,Int,Arr,Tpl,Vec(..),
-        cnd,while,whileM,tpl,mkArr,lnArr,ixArr,non,som,may,save)
+        cnd,while,whileM,tpl,mkArr,lnArr,ixArr,non,som,may,save,fixM,fix)
        where
 import Prelude hiding (Int,mapM,sequence)
 import QHaskell.Existential
@@ -131,6 +131,9 @@ may em en es = maybe en es em
 
 save :: a -> a
 save = id
+
+fixM :: (a -> ErrM a) -> ErrM a
+fixM f = let a = f (frmRgt a) in a
 
 shfRgt :: Int -> (Int -> Int)
 shfRgt i j = shiftR i (fromIntegral j)

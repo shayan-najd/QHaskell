@@ -1,10 +1,10 @@
 module QHaskell.Expression.ADTValue
     (Exp
     ,conI,conB,conF,var,abs,app,tpl,fst,snd,leT
-    ,typ,int,mem
+    ,typ,int,mem,fix
     ,Lft(..),CoLft(..)) where
 
-import QHaskell.MyPrelude hiding (abs,fst,snd,may,som,non,tpl,cnd)
+import QHaskell.MyPrelude hiding (abs,fst,snd,may,som,non,tpl,cnd,fix)
 import qualified QHaskell.MyPrelude as MP
 import qualified QHaskell.Type.ADT as TFA
 
@@ -136,3 +136,7 @@ int = lift . prm0
 
 mem :: Exp -> NamM ErrM Exp
 mem = return
+
+fix :: Exp -> NamM ErrM Exp
+fix (Abs  l) = lift (fixM l)
+fix _        = badTypValM

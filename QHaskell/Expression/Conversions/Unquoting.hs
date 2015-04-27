@@ -1,4 +1,4 @@
-module QHaskell.Expression.Conversions.Unquoting () where
+module QHaskell.Expression.Conversions.Unquoting (QM(..)) where
 
 import QHaskell.MyPrelude
 
@@ -28,6 +28,9 @@ instance Cnv (DTH.MExp , r) (AUN.Exp TH.Name) where
       | n === 'save         -> do v1 <- newTHVar
                                   pure (AUN.Abs (v1 ,
                                        AUN.Mem (AUN.Var v1)))
+      | n === 'fix          -> do v1 <- newTHVar
+                                  pure (AUN.Abs (v1 ,
+                                        AUN.Fix (AUN.Var v1)))
       | otherwise           -> pure (AUN.Var (stripNameSpace n))
     DTH.MConE n
       | n === 'True         -> pure (AUN.ConB True)
@@ -55,6 +58,7 @@ instance Cnv (DTH.MExp , r) (AUN.Exp TH.Name) where
       | n === 'fst      -> AUN.Fst  <$@> e
       | n === 'snd      -> AUN.Snd  <$@> e
       | n === 'save     -> AUN.Mem  <$@> e
+      | n === 'fix      -> AUN.Fix  <$@> e
     DTH.MAppE ef ea     -> AUN.App  <$@> ef <*@> ea
     DTH.MLamE x   eb    -> AUN.Abs  <$@> (x , eb)
     DTH.MSigE e  t      -> AUN.Typ  <$@> t  <*@> e
