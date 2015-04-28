@@ -24,9 +24,10 @@ union r1 r2 = \p -> r1 p || r2 p
 magnitude :: Point -> Float
 magnitude (x,y) = sqrt (x ** 2 + y ** 2)
 
-----------------------------------------------------------------------
--- \begin{Code generated automatically by a Template Haskell function}
-----------------------------------------------------------------------
+makeQDSL "RegionLang" ['circle,'outside,'intersection,'union,'magnitude]
+
+{-
+\begin{Code generated automatically by a Template Haskell function}
 
 type Types = [Radius -> Region
              ,Region -> Region
@@ -42,25 +43,31 @@ evalEnv :: EvalEnv Types
 evalEnv = circle <+> outside <+> intersection <+> union <+>
           magnitude <+> nil
 
+translate :: Type a => Qt a -> ErrM (RegionLang a)
+translate = tran typeEnv
+
+evaluate :: Type a => RegionLang a -> a
+evaluate = eval evalEnv
+
+normalise :: Type a => RegionLang a -> RegionLang a
+normalise = norm
+
 type RegionLang a = Dp Types a
 
-tranRegionLang :: Type a => Qt a -> ErrM (RegionLang a)
-tranRegionLang = tran typeEnv
+qqRegionLang :: Type a => Qt a -> Qt (RegionLang a)
+qqRegionLang = tranQ typeEnv
 
-evalRegionLang :: Type a => RegionLang a -> a
-evalRegionLang = eval evalEnv
+\end{Code generated automatically by a Template Haskell function}
+-}
 
-----------------------------------------------------------------------
--- \end{Code generated automatically by a Template Haskell function}
-----------------------------------------------------------------------
 type Result = Region
 
 compile :: Type a => RegionLang a -> a
-compile = evalRegionLang
+compile = evaluate
 
 regionLang :: Qt Region -> ErrM Region
-regionLang q = do d <- tranRegionLang q
-                  return (compile (norm d))
+regionLang q = do d <- translate q
+                  return (compile (normalise d))
 
 inRegion :: Qt Region -> Point -> ErrM Bool
 inRegion q p = do f <- regionLang q
@@ -71,4 +78,5 @@ inRegion :: Qt (Point  -> Region -> Bool)
 inRegion = [|| \ p r -> r p ||]
 -}
 
+test :: ErrM Bool
 test = inRegion [|| outside (circle 3) ||] (5,5)

@@ -2,7 +2,7 @@
 module QHaskell
        (module Prelude,
         norm,tran,tranQ,eval,Qt,Dp,Type,EvalEnv,TypeEnv,(<:>),(<+>),nil,NameType(..),
-        ErrM(..),frmRgt)
+        ErrM(..),frmRgt,makeQDSL)
 where
 
 import Prelude
@@ -66,6 +66,46 @@ decompose ET.Emp        = (ET.Emp , ES.Emp)
 decompose (ET.Ext n ns) = let (ets , ess) = decompose ns
                           in  ( ET.Ext (singType n) ets
                               , ES.Ext (name n) ess)
+
+-- Name should start with a capital letter
+makeQDSL :: String -> [TH.Name] -> TH.Q [TH.Dec]
+makeQDSL name names = do
+  typeofNames <- mapM TH.qReify names
+  let typeN = TH.mkName name
+      typeT = return (TH.ConT typeN)
+      typesN = TH.mkName "Types"
+  d1 <- [d| type Types = $(foldr (\ (TH.VarI _ t _ _) ts ->
+                           [t| $(return t) ': $ts |])
+                          [t| '[] |] typeofNames)
+            typeEnv :: TypeEnv Types
+            typeEnv = $(foldr (\ t ts ->
+                            [| $(TH.lift t) <:> $ts |])
+                        [| nil |] names)
+
+            evalEnv :: EvalEnv Types
+            evalEnv = $(foldr (\ t ts ->
+                               [| $(return $ TH.VarE t) <+> $ts |])
+                        [| nil |] names)
+
+            translate :: Type a => Qt a -> ErrM ($typeT a)
+            translate = tran typeEnv
+
+            evaluate :: Type a => $typeT a -> a
+            evaluate = eval evalEnv
+
+            normalise :: Type a => $typeT a -> $typeT a
+            normalise = norm |]
+  d2 <- do varName <- TH.qNewName "a"
+           return $ [TH.TySynD typeN [TH.PlainTV varName]
+                          (TH.AppT (TH.AppT (TH.ConT ''Dp)
+                                     (TH.ConT typesN))
+                           (TH.VarT varName))]
+  d3 <- do ty <- [t|Type a => Qt a -> Qt ($typeT a)|]
+           ex <- [| tranQ $(return $ TH.VarE (TH.mkName "typeEnv")) |]
+           let qqName = TH.mkName ("qq" ++ name)
+           return [TH.SigD qqName ty,
+                   TH.ValD (TH.VarP qqName) (TH.NormalB ex) []]
+  return (d1 ++ d2 ++ d3)
 
 
 {-
