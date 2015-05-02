@@ -6,36 +6,29 @@ import qualified Prelude as P
 import QHaskell hiding (Int,repeat,not)
 import QHaskell.MyPrelude hiding (not)
 
-type Bit = (Int -> Bool)
+import QHaskell.Expression.GADTFirstOrder
+
+type Bit = Bool
 
 repeat :: Bool -> Bit
-repeat b = \_i -> b
+repeat b = b
 
 delay :: Bool -> Bit -> Bit
-delay a s = \i -> if i == 0 then a else s (i-1)
+delay a s = a
 
 not :: Bit -> Bit
-not s = \i -> P.not (s i)
+not s = P.not s
 
 xor2 :: (Bit,Bit) -> Bit
-xor2 (a,b) = \i -> if a i then not b i else b i
+xor2 (a,b) = if a then not b else b
 
 and2 :: (Bit,Bit) -> Bit
-and2 (a,b) = \i -> if a i then b i else False
+and2 (a,b) = if a then b else False
 
 makeQDSL "Lava" ['delay,'repeat,'not,'xor2,'and2]
 
-runSeq :: Qt Bit -> [Bool]
-runSeq q = let f = evaluate $ normalise $ frmRgt $ translate q
-           in map f [0..]
-
-runSeq1 :: Qt (Bit -> Bit) -> [Bool] -> [Bool]
-runSeq1 q = let f =  evaluate $ normalise $ frmRgt $ translate q
-            in \s -> map (f (\i -> s !! (fromIntegral i))) [0..]
-
 runComb :: Qt Bit -> Bool
-runComb q = let f = evaluate $ normalise $ frmRgt $ translate q
-            in  f 0
+runComb q = evaluate $ normalise $ frmRgt $ translate q
 
 ex1 = [|| delay True (repeat False) ||]
 
@@ -64,3 +57,7 @@ edge = [|| \inp -> let inp' = delay False inp
 toggle = [|| \change -> let out' = delay False out
                             out  = xor2 (change,out')
                         in  out ||]
+
+-- Stealing if-syntax
+
+ex2 = [|| \b c -> if b then not c else False ||]
