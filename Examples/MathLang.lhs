@@ -22,7 +22,7 @@ where |TypeEnv g| is a datatype containing a list of name, and
 corresponing simple type, of built-in language constructs, used for
 typechecking; |EvalEnv g| is a datatype containing a list of haskell
 functions, corresponding to each built-in language constructs, used
-for evaluation, |Qt a| represents quoted expressions of type |a|
+for evaluation; |Qt a| represents quoted expressions of type |a|
 in typed Template Haskell; and |Dp g a| is type of the final
 representation of terms (of type |a|, under the typing environment
 |g|). The typeclass |Type a| provides a term-level representation of
@@ -34,7 +34,7 @@ typing information.
 
 QuickDSL also provides a library to convert from the final
 representation mentioned above to some of the well-known alternative
-represenations.
+represenations (e.g. untyped ADT representation).
 
 The |norm| function normalises the input to a normal form which
 respects the proper sub-formula property.
@@ -42,7 +42,38 @@ respects the proper sub-formula property.
 The |eval| function evaluates the input term to a value in Haskell.
 
 QuickDSL also provides a library of some well-known transformations on
-the final representation.
+the final representation (e.g. common sub-expression elimination).
+
+Finally, QuickDSL provides the following function to automatically 
+generate typing environment, evaluation environment, and the necessary
+plumbing:
+
+< makeQDSL :: String -> [TH.Name] -> TH.Q [TH.Dec]
+
+It takes name of the DSL, and a list of names of the Haskell functions
+whose types are used for typing primitives with the same name and whose
+bodies are used for automatically evaluating the primitives of the same
+name. It produces functions specialised to work only with
+the generated DSL:
+
+< type Types = ... -- signature (a list of types) of built-in constructs
+< type NameOfDSL a = Dp Types a
+<
+< typeEnv :: TypeEnv Types
+< typeEnv = ...
+<
+< evalEnv :: EvalEnv Types
+< evalEnv = ...
+<
+< translate :: Type a => Qt a -> ErrM (NameOfDSL a)
+< translate = tran typeEnv
+<
+< normalise :: Type a => NameOfDSL a -> NameOfDSL a
+< normalise = norm
+<
+< evaluate :: Type a => NameOfDSL a -> a
+< evaluate = eval evalEnv
+
 
 Getting Started
 ---------------
@@ -50,7 +81,7 @@ In order to get started, the user (i.e. the QDSL developer, as opposed
 to the end-user) has to follow the following steps.
 
 Step 1:
-The user downloads Haskell-QDSL from GitHub, and installs it by
+The user downloads QHaskell from GitHub, and installs it by
 running the following command in the downloaded folder:
 
 < $> cabal install
@@ -59,8 +90,7 @@ Step 2:
 The user writes a module containing one function per built-in
 construct with explicit type annotation. This module is to be used to
 bypass Haskell's limitaiton of lacking proper support for open
-quotations. QuickDSL can provide tools to automate part of this
-procedure.
+quotations.
 
 > module Examples.MathLang where
 >
@@ -74,19 +104,32 @@ procedure.
 
 The names exported by the module (with their corresponding types) are
 used to form the typeing environment of built-in constructs needed for
-translation.
+translation. The user uses makeQDSL to generate the necessary code and
+plumbing.
 
-> type Types = [Float -> Float -> Float,
->               Float -> Float -> Float]
->
-> typeEnv :: TypeEnv Types
-> typeEnv = 'add <:> 'sub <:> nil
->
-> evalEnv :: EvalEnv Types
-> evalEnv = add <+> sub <+> nil
->
-> type MathLang a = Dp Types a
+> $(makeQDSL "MathLang" ['add,'sub])
 
+Above generates the following:
+
+< type Types = [Float -> Float -> Float,
+<               Float -> Float -> Float]
+<
+< type MathLang a = Dp Types a
+<
+< typeEnv :: TypeEnv Types
+< typeEnv = 'add <:> 'sub <:> nil
+<
+< evalEnv :: EvalEnv Types
+< evalEnv = add <+> sub <+> nil
+<
+< translate :: Type a => Qt a -> ErrM (MathLang a)
+< translate = tran typeEnv
+<
+< normalise :: Type a => MathLang a -> MathLang a
+< normalise = norm
+<
+< evaluate :: Type a => MathLang a -> a
+< evaluate = eval evalEnv
 
 Step 3:
 The user writes a back-end to translate the normalised final
