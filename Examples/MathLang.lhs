@@ -44,7 +44,7 @@ The |eval| function evaluates the input term to a value in Haskell.
 QuickDSL also provides a library of some well-known transformations on
 the final representation (e.g. common sub-expression elimination).
 
-Finally, QuickDSL provides the following function to automatically 
+Finally, QuickDSL provides the following function to automatically
 generate typing environment, evaluation environment, and the necessary
 plumbing:
 
@@ -104,10 +104,10 @@ quotations.
 
 The names exported by the module (with their corresponding types) are
 used to form the typeing environment of built-in constructs needed for
-translation. The user uses makeQDSL to generate the necessary code and
+translation. The user uses |makeQDSL| to generate the necessary code and
 plumbing.
 
-> $(makeQDSL "MathLang" ['add,'sub])
+> makeQDSL "MathLang" ['add,'sub]
 
 Above generates the following:
 
@@ -141,11 +141,11 @@ use it for building a compiler.
 > -- an very simplified compiler that takes the expression
 > -- evaluates it and prints it
 > compile :: (Show a , Type a) => MathLang a -> Result
-> compile = show . eval evalEnv
+> compile = show . evaluate
 >
 > mathLang :: (Show a , Type a) => Qt a -> ErrM Result
-> mathLang q = do d <- tran typeEnv q
->                 return (compile (norm d))
+> mathLang q = do d <- translate q
+>                 return (compile (normalise d))
 
 Step 4:
 The domain experts can use quotations to program in the DSL defined above.
