@@ -108,3 +108,6 @@ toggle = [|| \ change ->
               let out' = delay $$low out
                   out  = xor2 change out'
               in  out ||]
+
+vhdlToggle :: IO ()
+vhdlToggle = putStrLn (compile toggle)
