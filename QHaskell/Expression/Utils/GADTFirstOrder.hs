@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 module QHaskell.Expression.Utils.GADTFirstOrder
        (sucAll,prdAll,prdAllM,mapVar,sbs,replaceOne,cntVar,pattern TF
-       ,isVal,val,pattern V,pattern NV) where
+       ,isVal,val,pattern V,pattern NV,substitute) where
 
 import QHaskell.MyPrelude
 import QHaskell.Expression.GADTFirstOrder as FGFO
@@ -51,8 +51,10 @@ mapVar f ee = case ee of
 
 deriving instance Show (Exp g a)
 
-sbs :: (HasSin Typ a, HasSin Typ b) =>
-       Exp r a -> Exp (a ': r) b -> Exp r b
+substitute :: Exp g a -> Exp (a ': g) b -> Exp g b
+substitute = sbs
+
+sbs :: Exp r a -> Exp (a ': r) b -> Exp r b
 sbs e' ee = prdAll (sbs' (sucAll e') Zro ee)
 
 rp :: Var (a ': g) t -> Var (a ': b ': g) t
@@ -79,23 +81,19 @@ cntVar v ee = let t = sin :: Typ t in case ee of
     | otherwise                           -> [| const 0  |]))
 
 sbs' :: forall r t t'.
-       (HasSin Typ t , HasSin Typ t') =>
-       Exp r t' -> Var r t' -> Exp r t -> Exp r t
-sbs' e' v' ee = let t = sin :: Typ t in case ee of
-  Var v -> case eqlSin t (sinTyp v') of
-     Rgt Rfl -> if v == v'
-                then e'
-                else ee
-     _       -> ee
-  _   -> $(genOverloadedW 'ee ''Exp  ['Var] (trvWrp 't)
+        Exp r t' -> Var r t' -> Exp r t -> Exp r t
+sbs' e' v' ee = case ee of
+  Var v -> case eqlVar v v' of
+     Just Rfl -> e'
+     Nothing  -> ee
+  _   -> $(genOverloaded 'ee ''Exp  ['Var]
    (\ tt -> if
       | matchQ tt [t| Exp (t ': t) t |] -> [| sbs'F e' v' |]
       | matchQ tt [t| Exp t t |]        -> [| sbs'  e' v' |]
       | otherwise                       -> [| id |]))
 
 sbs'F :: forall r t t' t''.
-        (HasSin Typ t', HasSin Typ t) =>
-        Exp r t' -> Var r t' -> Exp (t'' ': r) t -> Exp (t'' ': r) t
+         Exp r t' -> Var r t' -> Exp (t'' ': r) t -> Exp (t'' ': r) t
 sbs'F e' v' e = sbs' (sucAll e') (Suc v') e
 
 isVal :: Exp n t -> Bool

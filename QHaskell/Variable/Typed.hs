@@ -1,7 +1,8 @@
 module QHaskell.Variable.Typed
-  (Var(..),prd,inc,incM) where
+  (Var(..),prd,inc,incM,eqlVar) where
 
 import QHaskell.MyPrelude
+import QHaskell.Singleton
 
 data Var :: [k] -> k -> * where
   Zro :: Var (t ': r) t
@@ -31,3 +32,11 @@ incM :: (Applicative m , Monad m) =>
        Var (ta ': r) t -> m (Var (ta ': r') t)
 incM _ Zro     = pure Zro
 incM f (Suc x) = Suc <$> f x
+
+eqlVar :: Var g a -> Var g b -> Maybe (Eql a b)
+eqlVar Zro     Zro      = Just Rfl
+eqlVar (Suc _) Zro      = Nothing
+eqlVar Zro     (Suc _)  = Nothing
+eqlVar (Suc x) (Suc x') = case eqlVar x x' of
+  Just Rfl -> Just Rfl
+  Nothing  -> Nothing
