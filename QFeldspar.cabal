@@ -1,0 +1,126 @@
+name:                QFeldspar
+version:             0.1.0.0
+synopsis:            QFeldspar: a QDSL front-end for MiniFeldspar
+homepage:            https://github.com/shayan-najd/QFeldspar
+license:             GPL-3
+license-file:        LICENSE
+author:              Shayan Najd
+maintainer:          sh dot najd att ed dot ac dot uk
+category:            Language
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  ghc-options: -Wall -fno-warn-orphans -fcontext-stack=40
+  default-extensions:
+     NoMonomorphismRestriction,
+     PolyKinds,
+     DataKinds,
+     ConstraintKinds,
+     TypeOperators,
+     TypeFamilies,
+     GADTs,
+     FlexibleInstances,
+     FlexibleContexts,
+     StandaloneDeriving,
+     DeriveFoldable,
+     DeriveFunctor,
+     DeriveTraversable,
+     DeriveDataTypeable,
+     DeriveGeneric,
+     NoUndecidableInstances,
+     MonoLocalBinds,
+     ScopedTypeVariables,
+     MultiParamTypeClasses,
+     TemplateHaskell,
+     Rank2Types,
+     PatternSynonyms,
+     ViewPatterns,
+     NoImplicitPrelude,
+     MultiWayIf
+  exposed-modules:
+     QFeldspar.NameMonad,
+     QFeldspar.InferenceMonad,
+     QFeldspar.ChangeMonad,
+     QFeldspar.Inference,
+     QFeldspar.Magic,
+     QFeldspar.Singleton,
+     QFeldspar.TraversalGenerator,
+     QFeldspar.MyPrelude,
+     QFeldspar.Existential,
+     QFeldspar.Solver,
+     QFeldspar.Conversion,
+     QFeldspar.ErrorMonad,
+     QFeldspar.Type.GADT,
+     QFeldspar.Type.Herbrand,
+     QFeldspar.Type.Conversion,
+     QFeldspar.Type.ADT,
+     QFeldspar.CSE,
+     QFeldspar.Normalisation,
+     QFeldspar.Expression.GADTHigherOrder,
+     QFeldspar.Expression.GADTValue,
+     QFeldspar.Expression.ADTValue,
+     QFeldspar.Expression.GADTFirstOrder,
+     QFeldspar.Expression.ADTUntypedNamed,
+     QFeldspar.Expression.ADTUntypedDebruijn,
+     QFeldspar.Expression.Conversion,
+     QFeldspar.Expression.GADTTyped,
+     QFeldspar.Expression.Utils.GADTFirstOrder,
+     QFeldspar.Expression.Utils.ADTUntypedNamed,
+     QFeldspar.Expression.Utils.ADTUntypedDebruijn,
+     QFeldspar.Expression.Utils.GADTTyped,
+     QFeldspar.Expression.Utils.Common,
+     QFeldspar.Expression.Utils.TemplateHaskell,
+     QFeldspar.Expression.Utils.Equality.GADTHigherOrder,
+     QFeldspar.Expression.Utils.Equality.GADTFirstOrder,
+     QFeldspar.Expression.Utils.Show.Common,
+     QFeldspar.Expression.Utils.Show.GADTHigherOrder,
+     QFeldspar.Expression.Utils.Show.GADTFirstOrder,
+     QFeldspar.Expression.Utils.Reuse.GADTHigherOrder,
+     QFeldspar.Expression.Conversions.EtaPrims,
+     QFeldspar.Expression.Conversions.Unquoting,
+     QFeldspar.Expression.Conversions.TypeWithnessing,
+     QFeldspar.Expression.Conversions.Lifting,
+     QFeldspar.Expression.Conversions.TypeInference,
+     QFeldspar.Expression.Conversions.ScopeWithnessing,
+     QFeldspar.Expression.Conversions.NameResolution,
+     QFeldspar.Expression.Conversions.Evaluation.GADTHigherOrder,
+     QFeldspar.Expression.Conversions.Evaluation.GADTFirstOrder,
+     QFeldspar.Expression.Conversions.Evaluation.ADTUntypedNamed,
+     QFeldspar.Expression.Conversions.Evaluation.ADTUntypedDebruijn,
+     QFeldspar.Expression.Conversions.Evaluation.GADTTyped,
+     QFeldspar.Nat.TH,
+     QFeldspar.Nat.GADT,
+     QFeldspar.Nat.Conversion,
+     QFeldspar.Nat.ADT,
+     QFeldspar.Simplification,
+     QFeldspar.Variable.Typed,
+     QFeldspar.Variable.Plain,
+     QFeldspar.Variable.Scoped,
+     QFeldspar.Variable.Conversion,
+     QFeldspar.Environment.Typed,
+     QFeldspar.Environment.Map,
+     QFeldspar.Environment.Plain,
+     QFeldspar.Environment.Scoped,
+     QFeldspar.Environment.Conversion
+  other-modules:
+     Tests.GADTHigherOrder,
+     Tests.GADTFirstOrder,
+     Tests.ADTUntypedNamed,
+     Tests.ADTUntypedDebruijn,
+     Tests.Conversion,
+     Tests.GADTTyped,
+     Tests.TemplateHaskell,
+     Test
+  build-depends:
+     base >=4.7 && <4.8,
+     mtl >=2.2 && <2.3,
+     template-haskell >=2.9 && <2.10,
+     pretty >=1.1 && <1.2,
+     directory >=1.2 && <1.3,
+     th-desugar >=1.5 && <1.6,
+     ghc-prim >=0.3 && <0.4,
+     th-orphans >=0.11 && <0.12,
+     containers >=0.5 && <0.6
+  default-language:    Haskell2010
