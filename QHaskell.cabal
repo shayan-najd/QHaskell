@@ -1,0 +1,126 @@
+name:                QHaskell
+version:             0.1.0.0
+synopsis:            QHaskell: a QDSL front-end for MiniFeldspar
+homepage:            https://github.com/shayan-najd/QHaskell
+license:             GPL-3
+license-file:        LICENSE
+author:              Shayan Najd
+maintainer:          sh dot najd att ed dot ac dot uk
+category:            Language
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  ghc-options: -Wall -fno-warn-orphans -fcontext-stack=40
+  default-extensions:
+     NoMonomorphismRestriction,
+     PolyKinds,
+     DataKinds,
+     ConstraintKinds,
+     TypeOperators,
+     TypeFamilies,
+     GADTs,
+     FlexibleInstances,
+     FlexibleContexts,
+     StandaloneDeriving,
+     DeriveFoldable,
+     DeriveFunctor,
+     DeriveTraversable,
+     DeriveDataTypeable,
+     DeriveGeneric,
+     NoUndecidableInstances,
+     MonoLocalBinds,
+     ScopedTypeVariables,
+     MultiParamTypeClasses,
+     TemplateHaskell,
+     Rank2Types,
+     PatternSynonyms,
+     ViewPatterns,
+     NoImplicitPrelude,
+     MultiWayIf
+  exposed-modules:
+     QHaskell.NameMonad,
+     QHaskell.InferenceMonad,
+     QHaskell.ChangeMonad,
+     QHaskell.Inference,
+     QHaskell.Magic,
+     QHaskell.Singleton,
+     QHaskell.TraversalGenerator,
+     QHaskell.MyPrelude,
+     QHaskell.Existential,
+     QHaskell.Solver,
+     QHaskell.Conversion,
+     QHaskell.ErrorMonad,
+     QHaskell.Type.GADT,
+     QHaskell.Type.Herbrand,
+     QHaskell.Type.Conversion,
+     QHaskell.Type.ADT,
+     QHaskell.CSE,
+     QHaskell.Normalisation,
+     QHaskell.Expression.GADTHigherOrder,
+     QHaskell.Expression.GADTValue,
+     QHaskell.Expression.ADTValue,
+     QHaskell.Expression.GADTFirstOrder,
+     QHaskell.Expression.ADTUntypedNamed,
+     QHaskell.Expression.ADTUntypedDebruijn,
+     QHaskell.Expression.Conversion,
+     QHaskell.Expression.GADTTyped,
+     QHaskell.Expression.Utils.GADTFirstOrder,
+     QHaskell.Expression.Utils.ADTUntypedNamed,
+     QHaskell.Expression.Utils.ADTUntypedDebruijn,
+     QHaskell.Expression.Utils.GADTTyped,
+     QHaskell.Expression.Utils.Common,
+     QHaskell.Expression.Utils.TemplateHaskell,
+     QHaskell.Expression.Utils.Equality.GADTHigherOrder,
+     QHaskell.Expression.Utils.Equality.GADTFirstOrder,
+     QHaskell.Expression.Utils.Show.Common,
+     QHaskell.Expression.Utils.Show.GADTHigherOrder,
+     QHaskell.Expression.Utils.Show.GADTFirstOrder,
+     QHaskell.Expression.Utils.Reuse.GADTHigherOrder,
+     QHaskell.Expression.Conversions.EtaPrims,
+     QHaskell.Expression.Conversions.Unquoting,
+     QHaskell.Expression.Conversions.TypeWithnessing,
+     QHaskell.Expression.Conversions.Lifting,
+     QHaskell.Expression.Conversions.TypeInference,
+     QHaskell.Expression.Conversions.ScopeWithnessing,
+     QHaskell.Expression.Conversions.NameResolution,
+     QHaskell.Expression.Conversions.Evaluation.GADTHigherOrder,
+     QHaskell.Expression.Conversions.Evaluation.GADTFirstOrder,
+     QHaskell.Expression.Conversions.Evaluation.ADTUntypedNamed,
+     QHaskell.Expression.Conversions.Evaluation.ADTUntypedDebruijn,
+     QHaskell.Expression.Conversions.Evaluation.GADTTyped,
+     QHaskell.Nat.TH,
+     QHaskell.Nat.GADT,
+     QHaskell.Nat.Conversion,
+     QHaskell.Nat.ADT,
+     QHaskell.Simplification,
+     QHaskell.Variable.Typed,
+     QHaskell.Variable.Plain,
+     QHaskell.Variable.Scoped,
+     QHaskell.Variable.Conversion,
+     QHaskell.Environment.Typed,
+     QHaskell.Environment.Map,
+     QHaskell.Environment.Plain,
+     QHaskell.Environment.Scoped,
+     QHaskell.Environment.Conversion
+  other-modules:
+     Tests.GADTHigherOrder,
+     Tests.GADTFirstOrder,
+     Tests.ADTUntypedNamed,
+     Tests.ADTUntypedDebruijn,
+     Tests.Conversion,
+     Tests.GADTTyped,
+     Tests.TemplateHaskell,
+     Test
+  build-depends:
+     base >=4.7 && <4.8,
+     mtl >=2.2 && <2.3,
+     template-haskell >=2.9 && <2.10,
+     pretty >=1.1 && <1.2,
+     directory >=1.2 && <1.3,
+     th-desugar >=1.5 && <1.6,
+     ghc-prim >=0.3 && <0.4,
+     th-orphans >=0.11 && <0.12,
+     containers >=0.5 && <0.6
+  default-language:    Haskell2010
