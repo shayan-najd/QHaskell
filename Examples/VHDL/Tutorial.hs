@@ -53,6 +53,9 @@ add3 = [|| \(x,y,z) ->
 
 -- 3.1
 
+-- WARNING: 'sumcarry' is duplicated in both 'bitAdder' and 'adder'
+-- below. I don't know how to avoid this problem.
+
 bitAdder (carryIn,[]) = ([],carryIn)
 bitAdder (carryIn,a:as) = ([|| fst $$sumcarry ||] : sums,carryOut)
   where
@@ -80,6 +83,8 @@ serial circ1 circ2 a = c
   where
     b = circ1 a
     c = circ2 b
+
+-- WARNING: More duplication going on here
 
 row circ (carryIn,[]) = ([], carryIn)
 row circ (carryIn, a:as) = ([|| fst $$bAndCarry ||] : bs, carryOut)
@@ -139,6 +144,9 @@ adderSeq = [|| \(a,b) ->
                let carryIn = delay $$low carryOut
                    (sum,carryOut) = $$fullAdd (carryIn,(a,b))
                in sum ||]
+
+-- WARNING: Duplication once again!
+-- Both 'rowSeq' and 'rowSeqReset'.
 
 rowSeq circ inp = [|| fst $$out ||]
   where
