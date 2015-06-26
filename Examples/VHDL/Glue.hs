@@ -70,6 +70,17 @@ toBackEndF (Abs n) = do i <- newVar
                         toBackEnd (substitute (Int i) n)
 toBackEndF _       = fail "Invalid normal form!"
 
+class ToBackEnd a where
+  toBackEndO :: Lava a -> NameMonad BE.Exp
+
+instance ToBackEnd Bool where
+  toBackEndO = toBackEnd
+
+instance ToBackEnd r => ToBackEnd (Bool -> r) where
+  toBackEndO (Abs n) = do i <- newVar
+                          toBackEndO (substitute (Int i) n)
+  toBackEndO _       = fail "Invalid normal form!"
+
 -----------------------------------------------------------------------
 -- Example
 -----------------------------------------------------------------------
