@@ -96,7 +96,7 @@ the entity. In particular, |makeQDSL| provides the following:
 (d) Evaluator:
     a function that evaluates the given term. If provided, it uses the
     body of the Haskell functions representing DSL language primitives.
-    The type evaluator for a QDSL T is the following:
+    The type of the evaluator for a QDSL T is the following:
  
     < evaluate :: Type a => T a -> a
 
