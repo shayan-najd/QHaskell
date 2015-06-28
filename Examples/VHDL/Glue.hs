@@ -15,9 +15,9 @@ import Examples.VHDL.BackEnd (NameMonad,newVar,runNameMonad)
 
 -- | compiles the given quotation to VHDL,
 --   or returns runtime error
-compile :: Qt (Bool -> Bool) -> String
+compile :: (Type a, ToBackEnd a) => Qt a -> String
 compile q = case translate q of
-  Rgt l ->  let l' = runNameMonad (toBackEndF (normalise l))
+  Rgt l ->  let l' = runNameMonad (toBackEndO (normalise l))
             in  BE.vhdl "prog" ["x1"] [l']
   Lft s -> error s
 
@@ -80,6 +80,9 @@ instance ToBackEnd r => ToBackEnd (Bool -> r) where
   toBackEndO (Abs n) = do i <- newVar
                           toBackEndO (substitute (Int i) n)
   toBackEndO _       = fail "Invalid normal form!"
+
+instance ToBackEnd (a,b) where
+  toBackEndO = toBackEnd
 
 -----------------------------------------------------------------------
 -- Example
