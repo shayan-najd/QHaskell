@@ -56,6 +56,9 @@ instance (Lift a , LiftN b) => LiftN (a -> b) where
 
 -}
 
+delayList :: [Bool] -> [Bool] -> [Bool]
+delayList (a:_) bs = a : bs
+
 evl :: [(String,Signal)] -> Exp -> Maybe Signal
 evl g l = case l of
   Bool  b   -> pure (lift0 b)
