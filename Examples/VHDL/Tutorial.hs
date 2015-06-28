@@ -11,7 +11,7 @@ import Examples.VHDL.Glue
 halfAdd = [|| \ (a,b) ->
               let sum   = xor2 a b
                   carry = and2 a b
-              in (sum,carry) ||] 
+              in (sum,carry) ||]
 
 -- Alternative definition of 'halfAdd' which moves the handling of
 -- tuples to the meta language. This allows for a definition of
@@ -260,7 +260,7 @@ evenSoFar = [|| \ inp ->
 
 -- 5.2
 
--- flipFlop = 
+-- flipFlop =
 
 -- Section 6 -- Sequential Verification
 
@@ -441,3 +441,6 @@ unriffle as = even as ++ odd as
 -}
 
 unriffle = pair ->- unzipp ->- append
+
+
+test = compile [|| \a -> snd ($$halfAdd (a,$$low)) ||]
