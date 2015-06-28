@@ -309,6 +309,9 @@ compose (circ : circs) inp = out
     x   = [|| $$circ $$inp ||]
     out = compose circs x
 
+sequ []             = [|| \inp -> inp ||]
+sequ (circ : circs) = [|| \inp -> $$(sequ circs) (circ inp) ||]
+
 {- It doesn't seem possible to splice infix operators
 
 compose1 []             inp = inp
