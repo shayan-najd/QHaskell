@@ -69,7 +69,7 @@ evl g l = case l of
   And   m n -> lift2 (&&) <$> evl g m <*> evl g n
   Or    m n -> lift2 (||) <$> evl g m <*> evl g n
   Xor   m n -> lift2 (\ x y -> if x then not y else y) <$> evl g m <*> evl g n
-  Delay m n -> (\ m' n'  i -> if i == 0 then m' i else n' (i - 1)) <$> evl g m <*> evl g n
+  Delay m n -> (\ m' n' i -> if i == 0 then m' i else n' (i - 1)) <$> evl g m <*> evl g n
   Pair  m n -> lift2 ((,) :: Res -> Res -> (Res,Res))
                <$> evl g m <*> evl g n
   Fix   x n -> fix (\ ~(Just n') -> evl ((x , n') : g) n)
