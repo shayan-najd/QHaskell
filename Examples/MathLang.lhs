@@ -101,13 +101,20 @@ quotations.
 >
 > sub :: Float -> Float -> Float
 > sub = (-)
+>
+> mul :: Float -> Float -> Float
+> mul = (*)
+>
+> div :: Float -> Float -> Float
+> div = (/)
+
 
 The names exported by the module (with their corresponding types) are
 used to form the typeing environment of built-in constructs needed for
 translation. The user uses |makeQDSL| to generate the necessary code and
 plumbing.
 
-> makeQDSL "MathLang" ['add,'sub]
+> makeQDSL "MathLang" ['add,'sub,'mul,'div]
 
 Above generates the following:
 

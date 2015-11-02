@@ -79,4 +79,5 @@ inRegion = [|| \ p r -> r p ||]
 -}
 
 test :: ErrM Bool
-test = inRegion [|| outside (circle 3) ||] (5,5)
+test = inRegion [|| outside (circle 3) `intersection` circle 6 ||]
+       (4,4)

@@ -31,7 +31,7 @@ import QHaskell.Normalisation ()
 import QHaskell.Expression.GADTFirstOrder
 import QHaskell.Expression.Utils.GADTFirstOrder
 import QHaskell.Variable.Typed
-import QHaskell.Environment.Typed hiding (mapM,foldl,fmap)
+import QHaskell.Environment.Typed hiding (mapM,foldl,fmap,add)
 
 data NameType a = NameType {name :: TH.Name , singType :: TG.Typ a}
 
