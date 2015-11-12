@@ -9,7 +9,7 @@ module QHaskell
         ErrM(..),frmRgt,makeQDSL)
 where
 
-import Prelude
+import Prelude hiding (traverse,foldMap)
 -- import Prelude(Float,Bool(..),Maybe,String,(.))
 import QHaskell.MyPrelude (ErrM(..),runNamM,frmRgtZro,frmRgt)
 

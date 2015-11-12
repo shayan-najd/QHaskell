@@ -1,11 +1,11 @@
 -- A QDSL implementation of Bjesse, Claessen, Sheeran, and Singh's
 --   Lava: hardware design in Haskell
---      by Josef Svenningsson
+--      by Shayan Najd, Josef Svenningsson
 
--- This implementation is focuses on how to reuse evaluation in Lava
+-- This implementation focuses on how to reuse evaluation in Lava
 module Examples.Lava where
 
-import Prelude hiding (repeat,not,sum)
+import Prelude hiding (repeat,not,sum,traverse)
 import qualified Prelude as P
 
 import Data.Word
