@@ -40,6 +40,7 @@ library
      NoImplicitPrelude,
      MultiWayIf
   exposed-modules:
+     QHaskell,
      QHaskell.NameMonad,
      QHaskell.InferenceMonad,
      QHaskell.ChangeMonad,
@@ -104,6 +105,7 @@ library
      QHaskell.Environment.Plain,
      QHaskell.Environment.Scoped,
      QHaskell.Environment.Conversion,
+     QHaskell.Expression.Conversions.Reification,
      Language.Haskell.TH.Desugar.MiniCore
   other-modules:
      Tests.GADTHigherOrder,
