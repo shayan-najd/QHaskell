@@ -94,7 +94,7 @@ quotations.
 
 > module Examples.MathLang where
 >
-> import QHaskell
+> import QHaskell hiding (div)
 >
 > add :: Float -> Float -> Float
 > add = (+)

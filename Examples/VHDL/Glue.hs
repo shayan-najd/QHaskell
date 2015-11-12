@@ -17,7 +17,7 @@ import Examples.VHDL.BackEnd (NameMonad,newVar,runNameMonad)
 --   or returns runtime error
 compile :: (Type a, ToBackEnd a) => Qt a -> String
 compile q = case translate q of
-  Rgt l ->  let l' = runNameMonad (toBackEndO (normalise l))
+  Rgt l ->  let l' = runNameMonad (toBackEndO (normalise True l))
             in  BE.vhdl "prog" ["x1"] [l']
   Lft s -> error s
 

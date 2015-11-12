@@ -67,7 +67,7 @@ compile = evaluate
 
 regionLang :: Qt Region -> ErrM Region
 regionLang q = do d <- translate q
-                  return (compile (normalise d))
+                  return (compile (normalise True d))
 
 inRegion :: Qt Region -> Point -> ErrM Bool
 inRegion q p = do f <- regionLang q

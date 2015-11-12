@@ -5,7 +5,8 @@ module QHaskell
         module QHaskell.Expression.Utils.GADTFirstOrder,
         module QHaskell.Variable.Typed,
         module QHaskell.Environment.Typed,
-        norm,tran,tranQ,eval,Qt,Dp,Type,EvalEnv,TypeEnv,(<:>),(<+>),nil,NameType(..),
+        norm,tran,tranQ,eval,Qt,Dp,Type,EvalEnv,TypeEnv,(<:>),(<+>),nil,
+        NameType(..),
         ErrM(..),frmRgt,makeQDSL)
 where
 
@@ -52,7 +53,7 @@ type Type a     = HasSin TG.Typ a
 type Dp s g a   = GFO.Exp s g a
 type Qt a       = TH.Q (TH.TExp a)
 
-norm :: Type a => Dp s g a -> Dp s g a
+norm :: Type a => Bool -> Dp s g a -> Dp s g a
 norm = nrm
 
 tran :: Type a => TypeEnv s -> Qt a -> ErrM (Dp s '[] a)
@@ -101,7 +102,7 @@ makeQDSL name names = do
             evaluate :: Type a => $typeT a -> a
             evaluate = eval evalEnv
 
-            normalise :: Type a => $typeT a -> $typeT a
+            normalise :: Type a => Bool -> $typeT a -> $typeT a
             normalise = norm |]
   d2 <- do varName <- TH.qNewName "a"
            return $ [TH.TySynD typeN [TH.PlainTV varName]

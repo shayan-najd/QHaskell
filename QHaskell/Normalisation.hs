@@ -14,8 +14,8 @@ import qualified QHaskell.Type.GADT as TG
 import QHaskell.Environment.Typed
 import QHaskell.Magic
 
-nrm :: TG.Type a => Exp s g a -> Exp s g a
-nrm = tilNotChg nrmOne
+nrm :: TG.Type a => Bool -> Exp s g a -> Exp s g a
+nrm b = tilNotChg (nrmOne b)
 
 cmt :: forall a s g d d' as c.
        (Match c as a , TG.Type a , as ~ Add d d' , TG.Types d , TG.Types d') =>
@@ -36,11 +36,11 @@ cmt x d d' = do
 hasNV :: Env (Exp s g) d -> Bool
 hasNV = foldl (\ b e -> b || (not (isVal e))) False
 
-nrmOne :: forall s g a. TG.Type a => Exp s g a -> Chg (Exp s g a)
-nrmOne ee = let t = sin :: TG.Typ a in case ee of
+nrmOne :: forall s g a. TG.Type a => Bool -> Exp s g a -> Chg (Exp s g a)
+nrmOne b ee = let t = sin :: TG.Typ a in case ee of
     Prm x es
-      | hasNV es    -> cmt x Emp es
-      | otherwise   -> Prm x <$> TG.mapMC nrmOne es
+      | b && hasNV es -> cmt x Emp es
+      | otherwise     -> Prm x <$> TG.mapMC (nrmOne b) es
 
     App ef                      (NV ea) -> chg (LeT ea (App (sucAll ef) (Var Zro)))
     App (TF (Abs eb))           (V  ea) -> chg (sbs ea eb)
@@ -51,18 +51,18 @@ nrmOne ee = let t = sin :: TG.Typ a in case ee of
     Cnd (TF (ConB True))  et _  -> chg et
     Cnd (TF (ConB False)) _  ef -> chg ef
 
-    Tpl (NV ef) es               -> case TG.getPrfHasSinTpl t of
+    Tpl (NV ef) es | b           -> case TG.getPrfHasSinTpl t of
       (PrfHasSin , PrfHasSin)    -> chg (LeT ef (Tpl (Var Zro) (sucAll es)))
-    Tpl (V ef)  (NV es)          -> case TG.getPrfHasSinTpl t of
+    Tpl (V ef)  (NV es) | b      -> case TG.getPrfHasSinTpl t of
       (PrfHasSin , PrfHasSin)    -> chg (LeT es (Tpl (sucAll ef) (Var Zro)))
 
-    Fst (NV e)                   -> chg (LeT e (Fst (Var Zro)))
+    Fst (NV e)  | b              -> chg (LeT e (Fst (Var Zro)))
     Fst (TF (Tpl (V ef) (V _)))  -> chg  ef
 
-    Snd (NV e)                   -> chg (LeT e (Snd (Var Zro)))
+    Snd (NV e)  | b              -> chg (LeT e (Snd (Var Zro)))
     Snd (TF (Tpl (V _)  (V es))) -> chg  es
 
-    LeT (TF (LeT (NV el') eb'))  eb   -> chg (LeT el' (LeT eb' (replaceOne eb)))
+    LeT (TF (LeT (NV el') eb'))  eb | b  -> chg (LeT el' (LeT eb' (replaceOne eb)))
     LeT (TF (Cnd ec et ef))      eb   -> chg (Cnd ec (LeT et eb) (LeT ef eb))
     LeT (V v)               eb   -> chg (sbs v eb)
     LeT (NV v)         eb
@@ -77,5 +77,5 @@ nrmOne ee = let t = sin :: TG.Typ a in case ee of
 
     _                            -> $(genOverloadedMW 'ee ''Exp  ['Prm] (trvWrp 't)
      (\ tt -> if
-      | matchQ tt [t| Exp a a a |] -> [| nrmOne |]
-      | otherwise                  -> [| pure   |]))
+      | matchQ tt [t| Exp a a a |] -> [| nrmOne b |]
+      | otherwise                  -> [| pure     |]))

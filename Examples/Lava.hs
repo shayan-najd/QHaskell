@@ -34,15 +34,15 @@ repeat b = \_i -> b
 makeQDSL "Lava" ['inv,'and2,'or2,'xor2,'delay,'repeat]
 
 runSeq :: Qt Bit -> [Bool]
-runSeq q = let f = evaluate $ normalise $ frmRgt $ translate q
+runSeq q = let f = evaluate $ normalise True $ frmRgt $ translate q
            in map f [0..]
 
 runSeq1 :: Qt (Bit -> Bit) -> [Bool] -> [Bool]
-runSeq1 q = let f =  evaluate $ normalise $ frmRgt $ translate q
+runSeq1 q = let f =  evaluate $ normalise True $ frmRgt $ translate q
             in \s -> map (f (\i -> s !! (fromIntegral i))) [0..]
 
 runComb :: Qt Bit -> Bool
-runComb q = let f = evaluate $ normalise $ frmRgt $ translate q
+runComb q = let f = evaluate $ normalise True $ frmRgt $ translate q
             in  f 0
 
 -- rep :: Qt (Bit -> Bit)
